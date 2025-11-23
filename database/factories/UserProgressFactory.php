@@ -1,0 +1,27 @@
+<?php
+
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\UserProgress>
+ */
+class UserProgressFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+
+    protected $model = \App\Models\UserProgress::class;
+    public function definition(): array
+    {
+        return [
+            //
+            "completed"=>fake()->randomElement([true,false]),
+            "progress_percentage" => fake()->numberBetween(0, 100),
+        ];
+    }
+}

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>💼 Startup Helper App</title>
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+            * {
+                box-sizing: border-box;
+                font-family: "Poppins", sans-serif;
+                scroll-behavior: smooth;
+            }
+
+            body {
+                margin: 0;
+                background: linear-gradient(135deg, #60a5fa, #2563eb, #0ea5e9);
+                background-size: 400% 400%;
+                animation: gradientBG 10s ease infinite;
+                color: #1f2937;
+            }
+
+            @keyframes gradientBG {
+                0% {
+                    background-position: 0% 50%;
+                }
+                50% {
+                    background-position: 100% 50%;
+                }
+                100% {
+                    background-position: 0% 50%;
+                }
+            }
+
+            header {
+                text-align: center;
+                color: white;
+                padding: 40px 20px 20px;
+                animation: fadeIn 1.5s ease;
+            }
+
+            header h1 {
+                margin-bottom: 10px;
+                font-size: 2rem;
+            }
+
+            select {
+                padding: 10px;
+                border-radius: 8px;
+                border: none;
+                font-size: 1rem;
+                margin-top: 10px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                transition: 0.3s;
+            }
+
+            select:hover {
+                transform: scale(1.05);
+            }
+
+            .container {
+                max-width: 900px;
+                background: white;
+                margin: 20px auto 40px;
+                padding: 25px;
+                border-radius: 15px;
+                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+                animation: fadeUp 1s ease;
+            }
+
+            h2 {
+                color: #2563eb;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 1.3rem;
+            }
+
+            h2 span {
+                font-size: 1.5rem;
+            }
+
+            ul {
+                line-height: 1.7;
+                padding-left: 20px;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 10px;
+            }
+            th,
+            td {
+                padding: 10px;
+                border: 1px solid #e5e7eb;
+                text-align: left;
+            }
+            th {
+                background: #f1f5f9;
+            }
+
+            tr:hover {
+                background: #f9fafb;
+                transition: 0.3s;
+            }
+
+            a {
+                color: #2563eb;
+                text-decoration: none;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
+
+            .summary {
+                background: #eff6ff;
+                border-left: 4px solid #2563eb;
+                padding: 12px;
+                border-radius: 6px;
+                color: #1e40af;
+                margin-top: 15px;
+                font-weight: 500;
+            }
+
+            .button {
+                display: inline-block;
+                background: linear-gradient(90deg, #2563eb, #3b82f6);
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 30px;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                margin-top: 25px;
+                transition: transform 0.3s, box-shadow 0.3s;
+            }
+
+            .button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+            }
+
+            footer {
+                text-align: center;
+                color: white;
+                opacity: 0.8;
+                padding: 20px;
+                font-size: 0.9rem;
+            }
+
+            @keyframes fadeUp {
+                0% {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                100% {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>💼 Startup Helper App</h1>
+            <p>Select a business type to view your startup plan</p>
+            <select id="businessSelect">
+                <option value="">-- Choose a business --</option>
+                <option value="printing">🖨️ Printing Shop</option>
+                <option value="supermarket">🏪 Supermarket</option>
+                <option value="realestate">🏢 Real Estate</option>
+            </select>
+        </header>
+
+        <div class="container" id="content">
+            <p style="text-align: center; color: #6b7280">
+                Select a business above to see the full plan 👆
+            </p>
+        </div>
+
+        <footer>© 2025 Startup Helper App — Created by D 🚀</footer>
+
+        <script>
+            const data = {
+                printing: {
+                    emoji: "🖨️",
+                    title: "Printing Shop Business Plan",
+                    overview:
+                        "Start a printing shop near schools or offices to offer printing, scanning, and photocopying services.",
+                    steps: [
+                        "Find a 10–20 m² location with good power and internet.",
+                        "Register your business license ($100–$250).",
+                        "Buy your printer, laptop, and furniture.",
+                        "Advertise locally using flyers and social media.",
+                    ],
+                    equipment: [
+                        {
+                            name: "Brother MFC-L8690CDW Printer",
+                            price: "$400–$700",
+                            link: "https://www.amazon.com/s?k=Brother+MFC-L8690CDW",
+                        },
+                        {
+                            name: "HP Laptop",
+                            price: "$500–$800",
+                            link: "https://www.amazon.com/s?k=HP+laptop",
+                        },
+                        {
+                            name: "A4 Paper Ream",
+                            price: "$5–$10",
+                            link: "https://www.noon.com/uae-en/",
+                        },
+                    ],
+                    cost: "$1,700 – $2,700 startup | $400 – $700/month",
+                    profit: "Average profit: $150–$800/month",
+                    tips: [
+                        "Always keep backup toner & paper.",
+                        "Offer USB/WhatsApp printing.",
+                        "Be fast and friendly.",
+                    ],
+                },
+                supermarket: {
+                    emoji: "🏪",
+                    title: "Supermarket Business Plan",
+                    overview:
+                        "A supermarket sells daily-use items like food and drinks. You’ll need shelves, fridges, and a POS system.",
+                    steps: [
+                        "Find a busy location (80–200 m²).",
+                        "Get your business license and permits.",
+                        "Buy shelves, freezers, and stock products.",
+                        "Hire 2–3 staff and market locally.",
+                    ],
+                    equipment: [
+                        {
+                            name: "Display Shelves",
+                            price: "$1,000–$2,000",
+                            link: "https://www.alibaba.com/showroom/supermarket-display-shelves.html",
+                        },
+                        {
+                            name: "POS System",
+                            price: "$400–$800",
+                            link: "https://www.amazon.com/s?k=pos+system+for+small+business",
+                        },
+                        {
+                            name: "Fridge/Freezer",
+                            price: "$1,200–$2,000",
+                            link: "https://www.noon.com/uae-en/appliances/refrigerators/",
+                        },
+                    ],
+                    cost: "$10,000 – $20,000 startup | $4,000 – $6,000/month",
+                    profit: "Average profit: $2,000–$4,000/month",
+                    tips: [
+                        "Keep your shelves organized.",
+                        "Offer loyalty discounts.",
+                        "Monitor your top-selling products.",
+                    ],
+                },
+                realestate: {
+                    emoji: "🏢",
+                    title: "Real Estate Business Plan",
+                    overview:
+                        "Help clients buy, sell, or rent properties. Earn commissions on every deal you close.",
+                    steps: [
+                        "Register your real estate license.",
+                        "Set up your office or work remotely.",
+                        "Use property listing sites for visibility.",
+                        "Build relationships with owners and investors.",
+                    ],
+                    equipment: [
+                        {
+                            name: "Laptop/PC",
+                            price: "$500–$1,000",
+                            link: "https://www.amazon.com/s?k=laptop",
+                        },
+                        {
+                            name: "DSLR Camera",
+                            price: "$400–$800",
+                            link: "https://uae.sharafdg.com/category/cameras/canon-cameras/",
+                        },
+                        {
+                            name: "Website Domain",
+                            price: "$50/year",
+                            link: "https://www.namecheap.com/domains/",
+                        },
+                    ],
+                    cost: "$2,000 – $4,000 startup | $500 – $1,000/month",
+                    profit: "Average income: $2,000–$6,000/month (commission based)",
+                    tips: [
+                        "Take high-quality photos.",
+                        "Be honest with clients.",
+                        "Promote on social media and property sites.",
+                    ],
+                },
+            };
+
+            const container = document.getElementById("content");
+            const select = document.getElementById("businessSelect");
+
+            select.addEventListener("change", () => {
+                const key = select.value;
+                if (!key) {
+                    container.innerHTML =
+                        '<p style="text-align:center; color:#6b7280;">Select a business above to see the full plan 👆</p>';
+                    return;
+                }
+                const biz = data[key];
+                container.innerHTML = `
+        <h2>${biz.emoji} ${biz.title}</h2>
+        <p>${biz.overview}</p>
+        <h2>🪜 Steps</h2>
+        <ul>${biz.steps.map((s) => `<li>${s}</li>`).join("")}</ul>
+        <h2>🧰 Equipment</h2>
+        <table>
+          <tr><th>Item</th><th>Price</th><th>Buy</th></tr>
+          ${biz.equipment
+              .map(
+                  (eq) =>
+                      `<tr><td>${eq.name}</td><td>${eq.price}</td><td><a href="${eq.link}" target="_blank">View</a></td></tr>`
+              )
+              .join("")}
+        </table>
+        <h2>💰 Cost & Profit</h2>
+        <div class="summary">Startup: ${biz.cost} <br> Profit: ${
+                    biz.profit
+                }</div>
+        <h2>💡 Tips</h2>
+        <ul>${biz.tips.map((t) => `<li>${t}</li>`).join("")}</ul>
+        <div style="text-align:center;">
+          <button class="button" onclick="window.print()">📄 Download / Print Plan</button>
+        </div>
+      `;
+            });
+        </script>
+    </body>
+</html>
