@@ -28,9 +28,8 @@ class DatabaseSeeder extends Seeder
         User::factory(10)->create();
         // $this->call(Language::class);
         Language::factory(3)->create();
-         $this->call(UnitSeeder::class);
-
-         $this->call(LessonSeeder::class);
+        $this->call(UnitSeeder::class);
+        $this->call(LessonSeeder::class);
 
          Vocabulary::factory(10)->create([
              'lesson_id' => 1, // replace with actual lesson_id

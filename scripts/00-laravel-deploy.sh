@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
-echo "Running composer"
+set -e
+
+echo "Installing composer dependencies..."
 composer install --no-dev --working-dir=/var/www/html
 
-echo "Caching config..."
+echo "Caching config and routes..."
 php artisan config:cache
-
-echo "Caching routes..."
 php artisan route:cache
 
-echo "Running migrations..."
-php artisan migrate --force
+echo "Migrating and seeding database..."
+php artisan migrate --seed --force
 
-echo "Seeding database..."
-php artisan db:seed --force
+echo "Deployment complete!"
