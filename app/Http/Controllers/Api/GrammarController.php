@@ -27,9 +27,9 @@ class GrammarController extends Controller
     {
 
 
-        if ($request->user()->id !== 19) {
-            return response()->json(['error' => 'Unauthorized. Only super user can update quizzes.'], 403);
-        }
+        // if ($request->user()->id !== 19) {
+        //     return response()->json(['error' => 'Unauthorized. Only super user can update quizzes.'], 403);
+        // }
         //
 
 
@@ -73,9 +73,9 @@ class GrammarController extends Controller
     public function update(Request $request,Unit $unit,Lesson $lesson,Grammar $grammar)
     {
        
-       if ($request->user()->id !== 19) {
-            return response()->json(['error' => 'Unauthorized. Only super user can update quizzes.'], 403);
-        }
+    //    if ($request->user()->id !== 19) {
+    //         return response()->json(['error' => 'Unauthorized. Only super user can update quizzes.'], 403);
+    //     }
        
        
         //
@@ -101,9 +101,9 @@ class GrammarController extends Controller
     public function destroy(Request $request,Unit $unit,Lesson $lesson,Grammar $grammar)
     {
 
-        if ($request->user()->id !== 19) {
-            return response()->json(['error' => 'Unauthorized. Only super user can update quizzes.'], 403);
-        }
+        // if ($request->user()->id !== 19) {
+        //     return response()->json(['error' => 'Unauthorized. Only super user can update quizzes.'], 403);
+        // }
         //
         $grammar->delete();
         return response()->noContent();

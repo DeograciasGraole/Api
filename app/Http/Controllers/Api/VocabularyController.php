@@ -31,9 +31,9 @@ class VocabularyController extends Controller
     {
         //
 
-        if ($request->user()->id !== 1) {
-            return response()->json(['error' => 'Unauthorized. Only super user can create vocabularies.'], 403);
-        }
+        // if ($request->user()->id !== 1) {
+        //     return response()->json(['error' => 'Unauthorized. Only super user can create vocabularies.'], 403);
+        // }
 
       
        $validated= $request->validate(
@@ -71,9 +71,9 @@ class VocabularyController extends Controller
         //
 
 
-        if ($request->user()->id !== 1) {
-            return response()->json(['error' => 'Unauthorized. Only super user can update vocabularies.'], 403);
-        }
+        // if ($request->user()->id !== 1) {
+        //     return response()->json(['error' => 'Unauthorized. Only super user can update vocabularies.'], 403);
+        // }
         $validated= $request->validate(
   [
            "language_id"=>"sometimes",
@@ -100,9 +100,9 @@ class VocabularyController extends Controller
     public function destroy( Request $request, Unit $unit,Lesson $lesson,Vocabulary $vocabulary)
     {
 
-         if ($request->user()->id !== 1) {
-            return response()->json(['error' => 'Unauthorized. Only super user can update quizzes.'], 403);
-        }
+        //  if ($request->user()->id !== 1) {
+        //     return response()->json(['error' => 'Unauthorized. Only super user can update quizzes.'], 403);
+        // }
         //
         $vocabulary->delete();
 

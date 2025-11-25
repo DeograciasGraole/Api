@@ -52,9 +52,9 @@ class UnitController extends Controller
     {
 
 
-        if ($request->user()->id !== 1) {
-            return response()->json(['error' => 'Unauthorized. Only super user can create units.'], 403);
-        }
+        // if ($request->user()->id !== 1) {
+        //     return response()->json(['error' => 'Unauthorized. Only super user can create units.'], 403);
+        // }
 
         $validated=$request->validate([
             "language_id"=>"required",
@@ -105,9 +105,9 @@ class UnitController extends Controller
     public function destroy(Request $request, Unit $unit)
     {
         //
-        if ($request->user()->id !== 1) {
-            return response()->json(['error' => 'Unauthorized. Only super user can delete units.'], 403);
-        }
+        // if ($request->user()->id !== 1) {
+        //     return response()->json(['error' => 'Unauthorized. Only super user can delete units.'], 403);
+        // }
         $unit->delete();
         return response()->noContent();
     }

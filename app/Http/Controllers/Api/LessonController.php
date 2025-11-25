@@ -27,9 +27,9 @@ class LessonController extends Controller
     public function store(Request $request)
     {
         // Restrict to user ID 19 only
-        if ($request->user()->id !== 1) {
-            return response()->json(['error' => 'Unauthorized. Only super user can create lessons.'], 403);
-        }
+        // if ($request->user()->id !== 1) {
+        //     return response()->json(['error' => 'Unauthorized. Only super user can create lessons.'], 403);
+        // }
 
         $validated=$request->validate([
             "name"=>"required",
@@ -67,9 +67,9 @@ class LessonController extends Controller
     public function update(Request $request, Unit $unit,Lesson $lesson)
     {
         // Restrict to user ID 19 only
-        if ($request->user()->id !== 1) {
-            return response()->json(['error' => 'Unauthorized. Only super user can update lessons.'], 403);
-        }
+        // if ($request->user()->id !== 1) {
+        //     return response()->json(['error' => 'Unauthorized. Only super user can update lessons.'], 403);
+        // }
 
          $validated=$request->validate([
             "name"=>"sometimes",
@@ -99,9 +99,9 @@ class LessonController extends Controller
     public function destroy(Request $request, Unit $unit,Lesson $lesson)
     {
         // Restrict to user ID 19 only
-        if ($request->user()->id !== 1) {
-            return response()->json(['error' => 'Unauthorized. Only super user can delete lessons.'], 403);
-        }
+        // if ($request->user()->id !== 1) {
+        //     return response()->json(['error' => 'Unauthorized. Only super user can delete lessons.'], 403);
+        // }
 
       $lesson->delete();
       return response('lesson delete',status:204);

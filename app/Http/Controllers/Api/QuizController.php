@@ -27,9 +27,9 @@ class QuizController extends Controller
     public function store(Request $request, Unit $unit, Lesson $lesson)
 {
     // Restrict to user ID 19 only
-    if ($request->user()->id !== 1) {
-        return response()->json(['error' => 'Unauthorized. Only super user can create quizzes.'], 403);
-    }
+    // if ($request->user()->id !== 1) {
+    //     return response()->json(['error' => 'Unauthorized. Only super user can create quizzes.'], 403);
+    // }
 
     $validated = $request->validate([
         "language_id" => "required",
@@ -68,9 +68,9 @@ class QuizController extends Controller
     public function update(Request $request,Unit $unit,Lesson $lesson,Quiz $quiz)
     {
         // Restrict to user ID 19 only
-        if ($request->user()->id !== 1) {
-            return response()->json(['error' => 'Unauthorized. Only super user can update quizzes.'], 403);
-        }
+        // if ($request->user()->id !== 1) {
+        //     return response()->json(['error' => 'Unauthorized. Only super user can update quizzes.'], 403);
+        // }
 
          $validated=$request->validate([
             "question"=>'sometimes',
@@ -92,9 +92,9 @@ class QuizController extends Controller
     public function destroy(Request $request, Unit $unit,Lesson $lesson,Quiz $quiz)
     {
         // Restrict to user ID 19 only
-        if ($request->user()->id !== 1) {
-            return response()->json(['error' => 'Unauthorized. Only super user can delete quizzes.'], 403);
-        }
+        // if ($request->user()->id !== 1) {
+        //     return response()->json(['error' => 'Unauthorized. Only super user can delete quizzes.'], 403);
+        // }
 
         $quiz->delete();
         return response()->noContent();
