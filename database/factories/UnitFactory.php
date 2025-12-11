@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class UnitFactory extends Factory
 {
-     private  $titles=[ "Beginner Daily Word","Number and Counting","Everyday Object ","Daily activities","Family and Friends"];
+     private  $titles=[ "Beginner A1","Elementary A2","Intermediate B1","Intermediate B1","Advanced C1"];
      private $images=["https://miro.medium.com/v2/resize:fit:1400/1*BmrptsFddF5F46ye3-dRXw.jpeg","https://miro.medium.com/v2/resize:fit:1400/1*BmrptsFddF5F46ye3-dRXw.jpeg","https://miro.medium.com/v2/resize:fit:1400/1*BmrptsFddF5F46ye3-dRXw.jpeg","https://miro.medium.com/v2/resize:fit:1400/1*BmrptsFddF5F46ye3-dRXw.jpeg","https://miro.medium.com/v2/resize:fit:1400/1*BmrptsFddF5F46ye3-dRXw.jpeg"];
      public static $index1 = 0;
      public static $index2=0;
