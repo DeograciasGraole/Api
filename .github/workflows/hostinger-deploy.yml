@@ -1,4 +1,4 @@
-name: test and deploy
+name: HostingerDeploy
 
 on:
   push:
@@ -10,36 +10,22 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: "8.2"
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
         with:
-          node-version: 22
-      - name: setup environment variables
-        run: |
-          cp .env.example .env
-          echo "APP_ENV=testing" >> .env
-          echo "DB_CONNECTION=mysql" >> .env
-          echo "DB_USERNAME=testing_user" >> .env
-          echo "DB_PASSWORD=super_secret" >> .env
-          echo "DB_DATABASE=testing" >> .env
+          node-version: 16
+      - name: Copy .env
+        run: cp .env.example .env
       - name: Install composer Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Install node dependencies
         run: npm ci
-      - name: build npm and generate key
+      - name: Setup Project
         run: |
-          php artisan key:generate
           npm run build
-      - name: Directory Permissions
-        run: chmod 755 -R storage bootstrap/cache
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to Server
+      - name: Deploy PHP to Server
         if: ${{ success() }}
-        uses: appleboy/ssh-action@v1.2.0
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
@@ -48,10 +34,74 @@ jobs:
           script_stop: true
           script: |
             cd domains
-            cd wgraole.com
-            php artisan down
+            cd laravel-space.com
             git pull
             php composer.phar install
-            php artisan migrate:fresh --seed --force
-            php artisan optimize
-            php artisan up
+            php artisan migrate --force
+      - name: Install SSH key
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -t rsa -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      - name: Copy Build Files to Target Server
+        run: |
+          rsync -r -e "ssh -p ${{ secrets.SSH_PORT }}" ${{ github.workspace }}/public/build/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:~/domains/wgraole.com/public/build
+
+# name: test and deploy
+
+# on:
+#   push:
+#     branches: [main]
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: shivammathur/setup-php@v2
+#         with:
+#           php-version: "8.2"
+#       - uses: actions/checkout@v4
+#       - uses: actions/setup-node@v4
+#         with:
+#           node-version: 22
+#       - name: setup environment variables
+#         run: |
+#           cp .env.example .env
+#           echo "APP_ENV=testing" >> .env
+#           echo "DB_CONNECTION=mysql" >> .env
+#           echo "DB_USERNAME=testing_user" >> .env
+#           echo "DB_PASSWORD=super_secret" >> .env
+#           echo "DB_DATABASE=testing" >> .env
+#       - name: Install composer Dependencies
+#         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+#       - name: Install node dependencies
+#         run: npm ci
+#       - name: build npm and generate key
+#         run: |
+#           php artisan key:generate
+#           npm run build
+#       - name: Directory Permissions
+#         run: chmod 755 -R storage bootstrap/cache
+
+#   deploy:
+#     runs-on: ubuntu-latest
+#     needs: build
+#     steps:
+#       - name: Deploy to Server
+#         if: ${{ success() }}
+#         uses: appleboy/ssh-action@v1.2.0
+#         with:
+#           host: ${{ secrets.SSH_HOST }}
+#           username: ${{ secrets.SSH_USERNAME }}
+#           port: ${{ secrets.SSH_PORT }}
+#           key: ${{ secrets.SSH_KEY }}
+#           script_stop: true
+#           script: |
+#             cd domains
+#             cd wgraole.com
+#             php artisan down
+#             git pull
+#             php composer.phar install
+#             php artisan migrate:fresh --seed --force
+#             php artisan optimize
+#             php artisan up
