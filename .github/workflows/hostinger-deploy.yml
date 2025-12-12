@@ -39,7 +39,7 @@ jobs:
     steps:
       - name: Deploy to Server
         if: ${{ success() }}
-        uses: appleboy/ssh-action@1.2.1
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
