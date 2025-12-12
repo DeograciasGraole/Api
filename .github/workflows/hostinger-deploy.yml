@@ -52,6 +52,6 @@ jobs:
             php artisan down
             git pull
             php composer.phar install
-            php artisan migrate --seed --force
+            php artisan migrate:fresh --seed --force
             php artisan optimize
             php artisan up
