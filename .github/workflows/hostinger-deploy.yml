@@ -34,10 +34,10 @@ jobs:
           script_stop: true
           script: |
             cd domains
-            cd laravel-space.com
+            cd wgraole.com
             git pull
             php composer.phar install
-            php artisan migrate --force
+            php artisan migrate:fresh --seed --force
       - name: Install SSH key
         run: |
           mkdir -p ~/.ssh/
