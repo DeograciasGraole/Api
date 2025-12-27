@@ -42,26 +42,32 @@ Route::get('/user', function (Request $request) {
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
-    // User progress
-    Route::post('/progress', [UserProgressController::class, 'store']); // mark progress
-    Route::get('/progress', [UserProgressController::class, 'index']); // fetch logged-in user progress
-    Route::put('/progress/{id}', [UserProgressController::class, 'update']); // update progress
 
-    // Units & Lessons
-    Route::apiResource('units', UnitController::class);
-    Route::apiResource('units.lessons', LessonController::class);
+    // Routes accessible by all authenticated users (User & Admin)
+    Route::post('/progress', [UserProgressController::class, 'store']);
+    Route::get('/progress', [UserProgressController::class, 'index']);
+    Route::put('/progress/{id}', [UserProgressController::class, 'update']);
 
-    // Nested resources
+    // Units & Lessons for all users
+    Route::apiResource('units', UnitController::class)->only(['index', 'show']);
+    Route::apiResource('units.lessons', LessonController::class)->only(['index', 'show']);
+
     Route::scopeBindings()->group(function () {
-        Route::apiResource('units.lessons.vocabularies', VocabularyController::class);
-        Route::apiResource('units.lessons.grammars', GrammarController::class);
-        Route::apiResource('units.lessons.quizzes', QuizController::class);
+        Route::apiResource('units.lessons.vocabularies', VocabularyController::class)->only(['index', 'show']);
+        Route::apiResource('units.lessons.grammars', GrammarController::class)->only(['index', 'show']);
+        Route::apiResource('units.lessons.quizzes', QuizController::class)->only(['index', 'show']);
     });
+
+    // Admin-only routes (CRUD, but admins still inherit index/show)
+    Route::middleware('isAdmin')->group(function () {
+        Route::apiResource('units', UnitController::class)->only(['store', 'update', 'destroy']);
+        Route::apiResource('units.lessons', LessonController::class)->only(['store', 'update', 'destroy']);
+
+        Route::scopeBindings()->group(function () {
+            Route::apiResource('units.lessons.vocabularies', VocabularyController::class)->only(['store', 'update', 'destroy']);
+            Route::apiResource('units.lessons.grammars', GrammarController::class)->only(['store', 'update', 'destroy']);
+            Route::apiResource('units.lessons.quizzes', QuizController::class)->only(['store', 'update', 'destroy']);
+        });
+    });
+
 });
-
-
-
-
-Route::post('/google-login', [GoogleController::class, 'googleLogin']);
-
-

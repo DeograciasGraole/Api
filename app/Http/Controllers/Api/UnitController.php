@@ -85,9 +85,7 @@ class UnitController extends Controller
     public function update(Request $request, Unit $unit)
     {
         //
-        if ($request->user()->id !== 1) {
-            return response()->json(['error' => 'Unauthorized. Only super user can update units.'], 403);
-        }
+      
          $validated=$request->validate([
             "language_id"=>"sometimes",
             "title"=>"sometimes",

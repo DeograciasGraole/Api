@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => bcrypt('password'),
+            'role'=>  'admin', // assign admin role
          ]);
         User::factory(10)->create();
         // $this->call(Language::class);
