@@ -52,7 +52,7 @@ This backend API powers a language learning platform where users can:
 -   **Quiz System**: Multiple-choice quizzes for each lesson
 -   **Progress Tracking**: Track user progress through lessons with completion status and percentage
 -   **Google OAuth**: Social login support via Google
--   **Role-based Access**: Admin/super user controls for content management (user_id: 1)
+-   **Role-based Access Control**: Admin role-based permissions for content management (CRUD operations restricted to admins)
 
 ## 🛠 Technology Stack
 
@@ -177,6 +177,28 @@ Most endpoints require authentication via Laravel Sanctum. Include the token in 
 ```
 Authorization: Bearer {token}
 ```
+
+### Access Control
+
+- **Public Routes**: Registration and login endpoints are publicly accessible
+- **Authenticated Routes**: All other endpoints require authentication. Regular users can read (GET) resources
+- **Admin Routes**: Create, update, and delete operations require admin role (`role === 'admin'`)
+
+### Route Structure
+
+The API follows a nested resource structure:
+
+```
+/api/units                          # List all units (GET) | Create unit (POST - Admin)
+/api/units/{id}                     # Get unit (GET) | Update unit (PUT - Admin) | Delete unit (DELETE - Admin)
+/api/units/{unit}/lessons           # List lessons (GET) | Create lesson (POST - Admin)
+/api/units/{unit}/lessons/{lesson}  # Get lesson (GET) | Update lesson (PUT - Admin) | Delete lesson (DELETE - Admin)
+/api/units/{unit}/lessons/{lesson}/vocabularies  # List vocabularies (GET) | CRUD (Admin)
+/api/units/{unit}/lessons/{lesson}/grammars      # List grammars (GET) | CRUD (Admin)
+/api/units/{unit}/lessons/{lesson}/quizzes       # List quizzes (GET) | CRUD (Admin)
+```
+
+**Note**: All nested routes use Laravel's route model binding with `scopeBindings()` to ensure proper parent-child relationships.
 
 ---
 
@@ -315,9 +337,15 @@ Get details of the currently authenticated user.
 
 ### Google OAuth Login
 
+**Note**: Google OAuth controller exists but route is not currently registered. To enable, add the following route in `routes/api.php`:
+
+```php
+Route::post('google-login', [GoogleController::class, 'googleLogin']);
+```
+
 Authenticate user via Google OAuth.
 
-**Endpoint:** `POST /api/google-login`
+**Endpoint:** `POST /api/google-login` (when enabled)
 
 **Authentication:** Not required
 
@@ -421,7 +449,7 @@ Get a specific unit with its lessons.
 
 ### Create Unit
 
-Create a new unit (Admin only - user_id: 1).
+Create a new unit (Admin only).
 
 **Endpoint:** `POST /api/units`
 
@@ -463,7 +491,7 @@ Create a new unit (Admin only - user_id: 1).
 
 ### Update Unit
 
-Update an existing unit (Admin only - user_id: 1).
+Update an existing unit (Admin only).
 
 **Endpoint:** `PUT /api/units/{id}`
 
@@ -508,7 +536,7 @@ Update an existing unit (Admin only - user_id: 1).
 
 ```json
 {
-    "error": "Unauthorized. Only super user can update units."
+    "message": "Forbidden"
 }
 ```
 
@@ -516,7 +544,7 @@ Update an existing unit (Admin only - user_id: 1).
 
 ### Delete Unit
 
-Delete a unit.
+Delete a unit (Admin only).
 
 **Endpoint:** `DELETE /api/units/{id}`
 
@@ -646,7 +674,7 @@ Get a specific lesson with vocabularies, grammars, quizzes, and progress.
 
 ### Create Lesson
 
-Create a new lesson in a unit.
+Create a new lesson in a unit (Admin only).
 
 **Endpoint:** `POST /api/units/{unit}/lessons`
 
@@ -690,13 +718,13 @@ Create a new lesson in a unit.
 }
 ```
 
-**Note:** Currently hardcoded `language_id` and `unit_id` in controller.
+**Note:** The `language_id` is automatically set from the parent unit's `language_id`.
 
 ---
 
 ### Update Lesson
 
-Update an existing lesson.
+Update an existing lesson (Admin only).
 
 **Endpoint:** `PUT /api/units/{unit}/lessons/{lesson}`
 
@@ -745,7 +773,7 @@ Update an existing lesson.
 
 ```json
 {
-    "error": "Lesson does not belong to this unit"
+    "message": "Forbidden"
 }
 ```
 
@@ -753,7 +781,7 @@ Update an existing lesson.
 
 ### Delete Lesson
 
-Delete a lesson.
+Delete a lesson (Admin only).
 
 **Endpoint:** `DELETE /api/units/{unit}/lessons/{lesson}`
 
@@ -815,7 +843,7 @@ Get all vocabulary words in a specific lesson.
 
 ### Create Vocabulary
 
-Add a new vocabulary word to a lesson.
+Add a new vocabulary word to a lesson (Admin only).
 
 **Endpoint:** `POST /api/units/{unit}/lessons/{lesson}/vocabularies`
 
@@ -867,7 +895,7 @@ Add a new vocabulary word to a lesson.
 
 ### Update Vocabulary
 
-Update an existing vocabulary word.
+Update an existing vocabulary word (Admin only).
 
 **Endpoint:** `PUT /api/units/{unit}/lessons/{lesson}/vocabularies/{vocabulary}`
 
@@ -915,7 +943,7 @@ Update an existing vocabulary word.
 
 ### Delete Vocabulary
 
-Delete a vocabulary word.
+Delete a vocabulary word (Admin only).
 
 **Endpoint:** `DELETE /api/units/{unit}/lessons/{lesson}/vocabularies/{vocabulary}`
 
@@ -979,7 +1007,7 @@ Get all grammar rules in a specific lesson.
 
 ### Create Grammar Rule
 
-Add a new grammar rule to a lesson.
+Add a new grammar rule to a lesson (Admin only).
 
 **Endpoint:** `POST /api/units/{unit}/lessons/{lesson}/grammars`
 
@@ -1034,7 +1062,7 @@ Add a new grammar rule to a lesson.
 
 ### Update Grammar Rule
 
-Update an existing grammar rule.
+Update an existing grammar rule (Admin only).
 
 **Endpoint:** `PUT /api/units/{unit}/lessons/{lesson}/grammars/{grammar}`
 
@@ -1082,7 +1110,7 @@ Update an existing grammar rule.
 
 ### Delete Grammar Rule
 
-Delete a grammar rule.
+Delete a grammar rule (Admin only).
 
 **Endpoint:** `DELETE /api/units/{unit}/lessons/{lesson}/grammars/{grammar}`
 
@@ -1147,7 +1175,7 @@ Get all quizzes in a specific lesson.
 
 ### Create Quiz
 
-Add a new quiz question to a lesson.
+Add a new quiz question to a lesson (Admin only).
 
 **Endpoint:** `POST /api/units/{unit}/lessons/{lesson}/quizzes`
 
@@ -1210,7 +1238,7 @@ Add a new quiz question to a lesson.
 
 ### Update Quiz
 
-Update an existing quiz question.
+Update an existing quiz question (Admin only).
 
 **Endpoint:** `PUT /api/units/{unit}/lessons/{lesson}/quizzes/{quiz}`
 
@@ -1259,7 +1287,7 @@ Update an existing quiz question.
 
 ### Delete Quiz
 
-Delete a quiz question.
+Delete a quiz question (Admin only).
 
 **Endpoint:** `DELETE /api/units/{unit}/lessons/{lesson}/quizzes/{quiz}`
 
@@ -1445,6 +1473,11 @@ Update an existing progress record.
     php artisan db:seed
     ```
 
+    This will create:
+    - A test admin user: `test@example.com` / `password` (role: admin)
+    - 10 regular users
+    - Sample languages, units, lessons, vocabularies, grammars, and quizzes
+
 8. **Start the development server**
 
     ```bash
@@ -1500,6 +1533,25 @@ GOOGLE_REDIRECT_URI=http://localhost:8000/api/auth/google/callback
 ### Sanctum Configuration
 
 The API uses Laravel Sanctum for authentication. Ensure your `.env` file has the correct `SANCTUM_STATEFUL_DOMAINS` configured for your frontend domain.
+
+### User Roles
+
+Users have a `role` field that defaults to `'user'`. To create an admin user:
+
+1. **Via Database Seeder**: The seeder creates a default admin user
+2. **Via Database**: Update a user's role directly:
+   ```sql
+   UPDATE users SET role = 'admin' WHERE id = 1;
+   ```
+3. **Via Tinker**:
+   ```bash
+   php artisan tinker
+   ```
+   ```php
+   $user = User::find(1);
+   $user->role = 'admin';
+   $user->save();
+   ```
 
 ---
 
@@ -1649,7 +1701,7 @@ Currently, endpoints return all results. Pagination can be added in future versi
 
 ```json
 {
-    "error": "Unauthorized. Only super user can update units."
+    "message": "Forbidden"
 }
 ```
 
@@ -1686,6 +1738,22 @@ This API uses Laravel Sanctum for token-based authentication:
 -   Multiple tokens can exist per user (one per device/session)
 -   Logout deletes all tokens for the user
 
+### Role-Based Access Control
+
+The API implements role-based access control (RBAC) with two user roles:
+
+-   **User** (`role: 'user'`): Default role for all registered users
+    -   Can read (GET) all resources (units, lessons, vocabularies, grammars, quizzes)
+    -   Can manage their own progress
+    -   Cannot create, update, or delete content
+
+-   **Admin** (`role: 'admin'`): Administrative role
+    -   Has all user permissions
+    -   Can create, update, and delete all resources
+    -   Full CRUD access to units, lessons, vocabularies, grammars, and quizzes
+
+**Admin Access**: Admin routes are protected by the `isAdmin` middleware, which checks if the authenticated user's `role` field equals `'admin'`.
+
 ---
 
 ## 🗄️ Database Schema
@@ -1694,7 +1762,7 @@ This API uses Laravel Sanctum for token-based authentication:
 
 -   **users** - User accounts
 
-    -   `id`, `name`, `email`, `password`, `created_at`, `updated_at`
+    -   `id`, `name`, `email`, `password`, `role` (default: 'user'), `created_at`, `updated_at`
 
 -   **languages** - Supported languages
 
@@ -1740,7 +1808,7 @@ This API uses Laravel Sanctum for token-based authentication:
 -   **CSRF Protection**: Enabled for web routes
 -   **SQL Injection Protection**: Eloquent ORM prevents SQL injection
 -   **Input Validation**: All endpoints validate incoming data
--   **Role-based Access Control**: Admin checks (user_id: 1) for sensitive operations
+-   **Role-based Access Control**: Admin role-based permissions via `isAdmin` middleware for CRUD operations
 -   **HTTPS Ready**: Configure for HTTPS in production
 
 ### Security Best Practices
@@ -1876,6 +1944,13 @@ For support, please open an issue in the repository or contact the development t
 -   Quiz system
 -   Progress tracking
 -   Google OAuth integration
+
+### Version 1.1.0
+
+-   Role-based access control (RBAC) implementation
+-   Admin middleware for protected CRUD operations
+-   User role field added to users table
+-   Improved security with role-based permissions
 
 ---
 
