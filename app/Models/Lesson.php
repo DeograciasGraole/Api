@@ -29,9 +29,11 @@ class Lesson extends Model
 public function unit(){
         return $this->belongsTo(Unit::class);
     }
-     public function vocabularies(){
-        return $this->hasMany(vocabulary::class);
-     }
+     public function vocabularies()
+{
+    return $this->hasMany(Vocabulary::class);
+}
+
      public function grammars(){
         return $this->hasMany(Grammar::class);
      }
