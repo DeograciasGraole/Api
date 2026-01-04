@@ -213,6 +213,7 @@ Register a new user account.
 **Authentication:** Not required
 
 **Request Body:**
+//dd
 
 ```json
 {
