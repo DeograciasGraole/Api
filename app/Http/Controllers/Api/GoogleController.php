@@ -25,7 +25,7 @@ class GoogleController extends Controller
         if (!isset($payload["email"])) {
             return response()->json(["error" => "Invalid Google Token"], 401);
         }
-
+//oo
         // Create or get user
         $user = User::firstOrCreate(
             ['email' => $payload["email"]],
