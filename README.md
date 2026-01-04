@@ -180,9 +180,9 @@ Authorization: Bearer {token}
 
 ### Access Control
 
-- **Public Routes**: Registration and login endpoints are publicly accessible
-- **Authenticated Routes**: All other endpoints require authentication. Regular users can read (GET) resources
-- **Admin Routes**: Create, update, and delete operations require admin role (`role === 'admin'`)
+-   **Public Routes**: Registration and login endpoints are publicly accessible
+-   **Authenticated Routes**: All other endpoints require authentication. Regular users can read (GET) resources
+-   **Admin Routes**: Create, update, and delete operations require admin role (`role === 'admin'`)
 
 ### Route Structure
 
@@ -1474,6 +1474,7 @@ Update an existing progress record.
     ```
 
     This will create:
+
     - A test admin user: `test@example.com` / `password` (role: admin)
     - 10 regular users
     - Sample languages, units, lessons, vocabularies, grammars, and quizzes
@@ -1540,18 +1541,18 @@ Users have a `role` field that defaults to `'user'`. To create an admin user:
 
 1. **Via Database Seeder**: The seeder creates a default admin user
 2. **Via Database**: Update a user's role directly:
-   ```sql
-   UPDATE users SET role = 'admin' WHERE id = 1;
-   ```
+    ```sql
+    UPDATE users SET role = 'admin' WHERE id = 1;
+    ```
 3. **Via Tinker**:
-   ```bash
-   php artisan tinker
-   ```
-   ```php
-   $user = User::find(1);
-   $user->role = 'admin';
-   $user->save();
-   ```
+    ```bash
+    php artisan tinker
+    ```
+    ```php
+    $user = User::find(1);
+    $user->role = 'admin';
+    $user->save();
+    ```
 
 ---
 
@@ -1743,6 +1744,7 @@ This API uses Laravel Sanctum for token-based authentication:
 The API implements role-based access control (RBAC) with two user roles:
 
 -   **User** (`role: 'user'`): Default role for all registered users
+
     -   Can read (GET) all resources (units, lessons, vocabularies, grammars, quizzes)
     -   Can manage their own progress
     -   Cannot create, update, or delete content
